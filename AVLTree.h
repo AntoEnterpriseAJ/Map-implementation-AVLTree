@@ -26,7 +26,10 @@ public:
 	TreeNode<T>* min(TreeNode<T>* root);
 	TreeNode<T>* successor(TreeNode<T>* node);
 	TreeNode<T>* predecessor(TreeNode<T>* node);
-	TreeNode<T>* find(T key);
+
+	template<typename Comparator = std::less<T>>
+	TreeNode<T>* find(T key, Comparator compare = Comparator());
+
 	void deleteNode(T Key);
 	void erase(TreeNode<T>* node);
 	void construct(const std::vector<T>& keys);
@@ -43,7 +46,7 @@ public:
 };
 
 template<typename T>
-TreeNode<T>* AVLTree<T>::m_sentinelNode = new TreeNode<T>{ 0, 0 };
+TreeNode<T>* AVLTree<T>::m_sentinelNode = new TreeNode<T>{};
 
 template <typename T>
 AVLTree<T>::AVLTree() : m_root{ m_sentinelNode }
@@ -412,20 +415,25 @@ void AVLTree<T>::printTree(int option) const
 
 
 template <typename T>
-TreeNode<T>* AVLTree<T>::find(T key)
+template <typename Comparator>
+TreeNode<T>* AVLTree<T>::find(T key, Comparator compare)
 {
 	if (m_root == m_sentinelNode) return nullptr;
 
 	TreeNode<T>* current = m_root;
 	while (current != m_sentinelNode)
 	{
-		if (current->val == key) return current;
+		if (!compare(current->val, key) && !compare(key, current->val)) 
+			return current;
 
-		if (key > current->val)
+		if (compare(key, current->val))
+		{
+			current = current->left;
+		}
+		else
 		{
 			current = current->right;
 		}
-		else current = current->left;
 	}
 
 	return nullptr;
