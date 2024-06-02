@@ -2,13 +2,13 @@
 template <typename T>
 struct TreeNode
 {
-	T val;
+	T data;
 	int height;
 	TreeNode* left;
 	TreeNode* right;
 	TreeNode* parent;
 
 	TreeNode(T init = T{}, int h = 1, TreeNode* l = nullptr, TreeNode* r = nullptr, TreeNode* p = nullptr)
-		: val{ init }, height{ h }, left{ l }, right{ r }, parent{ p }
+		: data{ init }, height{ h }, left{ l }, right{ r }, parent{ p }
 	{}
 };

@@ -130,7 +130,6 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AVLTree.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="TreeNode.h" />
   </ItemGroup>

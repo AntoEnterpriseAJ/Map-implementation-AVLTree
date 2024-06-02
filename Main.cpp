@@ -1,7 +1,6 @@
-#include "Map.h"
 #include <iostream>
+#include "Map.h"
 
 int main()
 {
-	Map<int, int> map();
 }
