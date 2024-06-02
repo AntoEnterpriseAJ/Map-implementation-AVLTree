@@ -42,20 +42,6 @@ public:
         bool operator!=(const Iterator& other) const { return !(*this == other); }
 
         Iterator(TreeNode<std::pair<Key, Value>>* node) : m_node(node) {}
-<<<<<<< HEAD
-=======
-
-        Iterator& operator++();
-        Iterator operator++(int);
-        Iterator& operator--();
-        Iterator operator--(int);
-        reference operator*() const { return m_node->data; }
-        pointer operator->() const { return &(m_node->data); }
-        
-        bool operator==(const Iterator& other) const { return m_node == other.m_node; }
-        bool operator!=(const Iterator& other) const { return !(*this == other); }
-
->>>>>>> bf5d61119b1830832bac7bc175d655d96c5e7fdf
         friend class Map;
     private:
         TreeNode<std::pair<Key, Value>>* m_node;
