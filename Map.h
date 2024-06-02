@@ -8,7 +8,7 @@ template <typename Key, typename Value>
 class Map
 {
 public:
-    void insert(Key key, Value value);
+    void insert(const std::pair<Key, Value>& pair);
     void erase(Key key);
     void construct(const std::vector<std::pair<Key, Value>>& keys);
     void clear();
@@ -333,8 +333,11 @@ void Map<Key, Value>::deleteNode(TreeNode<std::pair<Key, Value>>* node)
 }
 
 template <typename Key, typename Value>
-void Map<Key, Value>::insert(Key key, Value value)
+void Map<Key, Value>::insert(const std::pair<Key, Value>& pair)
 {
+    const Key& key = pair.first;
+    const Value& value = pair.second;
+
     if (m_root == s_sentinelNode)
     {
         m_root = new TreeNode<std::pair<Key, Value>>{ {key, value}, 1, s_sentinelNode, s_sentinelNode, s_sentinelNode };

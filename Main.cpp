@@ -41,7 +41,7 @@ int main()
             std::cout << "Enter value: ";
             std::cin.ignore();
             std::getline(std::cin, value);
-            map.insert(key, value);
+            map.insert({ key, value });
             break;
         }
         case 2:
