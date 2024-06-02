@@ -90,7 +90,7 @@ int main()
             break;
         case 8:
             std::cout << "2D representation of the tree: " << std::endl;
-            map.print2D(map.getRoot());
+            map.printTree(5); // 5 for 2D
             break;
         case 9:
             map.clear();
@@ -105,6 +105,13 @@ int main()
         }
 
     } while (choice != 10);
+
+
+    std::cout << "\niterators:\n";
+    for (auto it = map.begin(); it != map.end(); ++it)
+    {
+        std::cout << it->first << " " << it->second << "\n";
+    }
 
     return 0;
 }

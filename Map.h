@@ -28,6 +28,69 @@ public:
     void printPostorder(TreeNode<std::pair<Key, Value>>* node) const;
     void printBreadth() const;
 
+    class Iterator {
+    public:
+        using value_type = std::pair<Key, Value>;
+        using pointer = value_type*;
+        using reference = value_type&;
+
+        Iterator(TreeNode<std::pair<Key, Value>>* node) : m_node(node) {}
+
+        Iterator& operator++() {
+            m_node = map->successor(m_node);
+            return *this;
+        }
+
+        Iterator operator++(int) {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        Iterator& operator--() {
+            m_node = map->predecessor(m_node);
+            return *this;
+        }
+
+        Iterator operator--(int) {
+            Iterator tmp = *this;
+            --(*this);
+            return tmp;
+        }
+
+        reference operator*() const {
+            return m_node->data;
+        }
+
+        pointer operator->() const {
+            return &(m_node->data);
+        }
+
+        bool operator==(const Iterator& other) const {
+            return m_node == other.m_node;
+        }
+
+        bool operator!=(const Iterator& other) const {
+            return !(*this == other);
+        }
+
+        friend class Map;
+
+    private:
+        TreeNode<std::pair<Key, Value>>* m_node;
+        Map* map;
+
+        Iterator(TreeNode<std::pair<Key, Value>>* node, Map* map) : m_node(node), map(map) {}
+    };
+
+    Iterator begin() {
+        return Iterator(min(m_root), this);
+    }
+
+    Iterator end() {
+        return Iterator(s_sentinelNode, this);
+    }
+
     Map();
     ~Map();
 
@@ -493,7 +556,7 @@ void Map<Key, Value>::printTree(int option) const
             << "1 - Preorder\n"
             << "2 - Inorder\n"
             << "3 - Postorder\n"
-            << "4 - Breadth\n";
+            << "4 - Breadth\n"
             << "5 - Print2D\n";
     }
     std::cout << "\n";
