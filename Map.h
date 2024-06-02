@@ -20,8 +20,6 @@ public:
     TreeNode<std::pair<Key, Value>>* predecessor(TreeNode<std::pair<Key, Value>>* node);
     TreeNode<std::pair<Key, Value>>* find(Key key);
 
-    TreeNode<std::pair<Key, Value>>* getRoot() const;
-
     bool empty() const;
     void printTree(int option) const;
     void print2D(TreeNode<std::pair<Key, Value>>* root) const;
@@ -59,9 +57,6 @@ Map<Key, Value>::~Map()
     clear();
     delete s_sentinelNode;
 }
-
-template<typename Key, typename Value>
-TreeNode<std::pair<Key, Value>>* Map<Key, Value>::getRoot() const { return m_root; }
 
 template <typename Key, typename Value>
 bool Map<Key, Value>::empty() const
@@ -489,12 +484,17 @@ void Map<Key, Value>::printTree(int option) const
         std::cout << "Breadth: ";
         printBreadth();
         break;
+    case 5:
+        std::cout << "Print2D: ";
+        print2D(m_root);
+        break;
     default:
         std::cout << "Please select a valid option: \n"
             << "1 - Preorder\n"
             << "2 - Inorder\n"
             << "3 - Postorder\n"
             << "4 - Breadth\n";
+            << "5 - Print2D\n";
     }
     std::cout << "\n";
 }
