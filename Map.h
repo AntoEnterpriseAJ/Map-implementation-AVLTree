@@ -7,7 +7,34 @@
 template <typename Key, typename Value>
 class Map
 {
-    static TreeNode<std::pair<Key, Value>>* m_sentinelNode;
+public:
+    void insert(Key key, Value value);
+    void deleteNode(Key key);
+    void erase(TreeNode<std::pair<Key, Value>>* node);
+    void construct(const std::vector<std::pair<Key, Value>>& keys);
+    void clear();
+
+    TreeNode<std::pair<Key, Value>>* max(TreeNode<std::pair<Key, Value>>* root);
+    TreeNode<std::pair<Key, Value>>* min(TreeNode<std::pair<Key, Value>>* root);
+    TreeNode<std::pair<Key, Value>>* successor(TreeNode<std::pair<Key, Value>>* node);
+    TreeNode<std::pair<Key, Value>>* predecessor(TreeNode<std::pair<Key, Value>>* node);
+    TreeNode<std::pair<Key, Value>>* find(Key key);
+
+    TreeNode<std::pair<Key, Value>>* getRoot() const;
+
+    bool empty() const;
+    void printTree(int option) const;
+    void print2D(TreeNode<std::pair<Key, Value>>* root) const;
+    void printPreorder(TreeNode<std::pair<Key, Value>>* node) const;
+    void printInorder(TreeNode<std::pair<Key, Value>>* node) const;
+    void printPostorder(TreeNode<std::pair<Key, Value>>* node) const;
+    void printBreadth() const;
+
+    Map();
+    ~Map();
+
+private:
+    static TreeNode<std::pair<Key, Value>>* s_sentinelNode;
 
     TreeNode<std::pair<Key, Value>>* m_root;
 
@@ -17,43 +44,20 @@ class Map
     void rotateRight(TreeNode<std::pair<Key, Value>>* node);
     void transplant(TreeNode<std::pair<Key, Value>>* z, TreeNode<std::pair<Key, Value>>* y);
     void print2DUtil(TreeNode<std::pair<Key, Value>>* root, int space) const;
-public:
-    Map();
-    ~Map();
-
-    void insert(Key key, Value value);
-    TreeNode<std::pair<Key, Value>>* max(TreeNode<std::pair<Key, Value>>* root);
-    TreeNode<std::pair<Key, Value>>* min(TreeNode<std::pair<Key, Value>>* root);
-    TreeNode<std::pair<Key, Value>>* successor(TreeNode<std::pair<Key, Value>>* node);
-    TreeNode<std::pair<Key, Value>>* predecessor(TreeNode<std::pair<Key, Value>>* node);
-    TreeNode<std::pair<Key, Value>>* find(Key key);
-    void deleteNode(Key key);
-    void erase(TreeNode<std::pair<Key, Value>>* node);
-    void construct(const std::vector<std::pair<Key, Value>>& keys);
-    void clear();
-
-    TreeNode<std::pair<Key, Value>>* getRoot() const;
-    bool empty() const;
-    void printTree(int option) const;
-    void print2D(TreeNode<std::pair<Key, Value>>* root) const;
-    void printPreorder(TreeNode<std::pair<Key, Value>>* node) const;
-    void printInorder(TreeNode<std::pair<Key, Value>>* node) const;
-    void printPostorder(TreeNode<std::pair<Key, Value>>* node) const;
-    void printBreadth() const;
 };
 
 template<typename Key, typename Value>
-TreeNode<std::pair<Key, Value>>* Map<Key, Value>::m_sentinelNode = new TreeNode<std::pair<Key, Value>>{ {Key{}, Value{}}, 0 };
+TreeNode<std::pair<Key, Value>>* Map<Key, Value>::s_sentinelNode = new TreeNode<std::pair<Key, Value>>{ {Key{}, Value{}}, 0 };
 
 template <typename Key, typename Value>
-Map<Key, Value>::Map() : m_root{ m_sentinelNode }
+Map<Key, Value>::Map() : m_root{ s_sentinelNode }
 {}
 
 template <typename Key, typename Value>
 Map<Key, Value>::~Map()
 {
     clear();
-    delete m_sentinelNode;
+    delete s_sentinelNode;
 }
 
 template<typename Key, typename Value>
@@ -62,13 +66,13 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::getRoot() const { return m_roo
 template <typename Key, typename Value>
 bool Map<Key, Value>::empty() const
 {
-    return m_root == m_sentinelNode;
+    return m_root == s_sentinelNode;
 }
 
 template <typename Key, typename Value>
 void Map<Key, Value>::insertRepair(TreeNode<std::pair<Key, Value>>* nodeParent)
 {
-    if (nodeParent == m_sentinelNode) return;
+    if (nodeParent == s_sentinelNode) return;
 
     int balanceFactor = nodeParent->right->height - nodeParent->left->height;
 
@@ -111,7 +115,7 @@ void Map<Key, Value>::insertRepair(TreeNode<std::pair<Key, Value>>* nodeParent)
 template <typename Key, typename Value>
 void Map<Key, Value>::deleteRepair(TreeNode<std::pair<Key, Value>>* node)
 {
-    if (node == m_sentinelNode) return;
+    if (node == s_sentinelNode) return;
 
     int balanceFactor = node->right->height - node->left->height;
 
@@ -177,7 +181,7 @@ void Map<Key, Value>::deleteRepair(TreeNode<std::pair<Key, Value>>* node)
 template <typename Key, typename Value>
 void Map<Key, Value>::transplant(TreeNode<std::pair<Key, Value>>* z, TreeNode<std::pair<Key, Value>>* y)
 {
-    if (z->parent == m_sentinelNode)
+    if (z->parent == s_sentinelNode)
     {
         m_root = y;
     }
@@ -187,7 +191,7 @@ void Map<Key, Value>::transplant(TreeNode<std::pair<Key, Value>>* z, TreeNode<st
     }
     else z->parent->right = y;
 
-    if (y != m_sentinelNode)
+    if (y != s_sentinelNode)
     {
         y->parent = z->parent;
     }
@@ -200,14 +204,14 @@ void Map<Key, Value>::deleteNode(Key key)
     if (node == nullptr) return;
 
     // node has no children
-    if (node->left == m_sentinelNode)
+    if (node->left == s_sentinelNode)
     {
         transplant(node, node->right);
         deleteRepair(node->parent);
     }
     else
     {
-        if (node->right == m_sentinelNode)
+        if (node->right == s_sentinelNode)
         {
             transplant(node, node->left);
             deleteRepair(node->parent);
@@ -238,14 +242,14 @@ void Map<Key, Value>::erase(TreeNode<std::pair<Key, Value>>* node)
     if (node == nullptr) return;
 
     // node has no children
-    if (node->left == m_sentinelNode)
+    if (node->left == s_sentinelNode)
     {
         transplant(node, node->right);
         deleteRepair(node->parent);
     }
     else
     {
-        if (node->right == m_sentinelNode)
+        if (node->right == s_sentinelNode)
         {
             transplant(node, node->left);
             deleteRepair(node->parent);
@@ -273,23 +277,23 @@ void Map<Key, Value>::erase(TreeNode<std::pair<Key, Value>>* node)
 template <typename Key, typename Value>
 void Map<Key, Value>::insert(Key key, Value value)
 {
-    if (m_root == m_sentinelNode)
+    if (m_root == s_sentinelNode)
     {
-        m_root = new TreeNode<std::pair<Key, Value>>{ {key, value}, 1, m_sentinelNode, m_sentinelNode, m_sentinelNode };
+        m_root = new TreeNode<std::pair<Key, Value>>{ {key, value}, 1, s_sentinelNode, s_sentinelNode, s_sentinelNode };
         return;
     }
 
     TreeNode<std::pair<Key, Value>>* node = m_root;
     TreeNode<std::pair<Key, Value>>* nodeParent = nullptr;
 
-    while (node != m_sentinelNode)
+    while (node != s_sentinelNode)
     {
         nodeParent = node;
         if (key == node->data.first) return; // key already present
         node = (key < node->data.first) ? node->left : node->right;
     }
 
-    TreeNode<std::pair<Key, Value>>* newNode = new TreeNode<std::pair<Key, Value>>{ {key, value}, 1, m_sentinelNode, m_sentinelNode, nodeParent };
+    TreeNode<std::pair<Key, Value>>* newNode = new TreeNode<std::pair<Key, Value>>{ {key, value}, 1, s_sentinelNode, s_sentinelNode, nodeParent };
 
     if (key < nodeParent->data.first)
     {
@@ -306,11 +310,11 @@ void Map<Key, Value>::insert(Key key, Value value)
 template <typename Key, typename Value>
 TreeNode<std::pair<Key, Value>>* Map<Key, Value>::max(TreeNode<std::pair<Key, Value>>* root)
 {
-    if (root == m_sentinelNode) return nullptr;
+    if (root == s_sentinelNode) return nullptr;
 
     TreeNode<std::pair<Key, Value>>* node = root;
 
-    while (node->right != m_sentinelNode)
+    while (node->right != s_sentinelNode)
     {
         node = node->right;
     }
@@ -320,11 +324,11 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::max(TreeNode<std::pair<Key, Va
 template <typename Key, typename Value>
 TreeNode<std::pair<Key, Value>>* Map<Key, Value>::min(TreeNode<std::pair<Key, Value>>* root)
 {
-    if (root == m_sentinelNode) return nullptr;
+    if (root == s_sentinelNode) return nullptr;
 
     TreeNode<std::pair<Key, Value>>* node = root;
 
-    while (node->left != m_sentinelNode)
+    while (node->left != s_sentinelNode)
     {
         node = node->left;
     }
@@ -334,12 +338,12 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::min(TreeNode<std::pair<Key, Va
 template <typename Key, typename Value>
 TreeNode<std::pair<Key, Value>>* Map<Key, Value>::successor(TreeNode<std::pair<Key, Value>>* node)
 {
-    if (node->right != m_sentinelNode)
+    if (node->right != s_sentinelNode)
     {
         return min(node->right);
     }
     TreeNode<std::pair<Key, Value>>* nodeParent = node->parent;
-    while (nodeParent != m_sentinelNode && node == nodeParent->right)
+    while (nodeParent != s_sentinelNode && node == nodeParent->right)
     {
         node = nodeParent;
         nodeParent = nodeParent->parent;
@@ -350,12 +354,12 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::successor(TreeNode<std::pair<K
 template <typename Key, typename Value>
 TreeNode<std::pair<Key, Value>>* Map<Key, Value>::predecessor(TreeNode<std::pair<Key, Value>>* node)
 {
-    if (node->left != m_sentinelNode)
+    if (node->left != s_sentinelNode)
     {
         return max(node->left);
     }
     TreeNode<std::pair<Key, Value>>* nodeParent = node->parent;
-    while (nodeParent != m_sentinelNode && node == nodeParent->left)
+    while (nodeParent != s_sentinelNode && node == nodeParent->left)
     {
         node = nodeParent;
         nodeParent = nodeParent->parent;
@@ -367,11 +371,11 @@ template <typename Key, typename Value>
 TreeNode<std::pair<Key, Value>>* Map<Key, Value>::find(Key key)
 {
     TreeNode<std::pair<Key, Value>>* node = m_root;
-    while (node != m_sentinelNode && node->data.first != key)
+    while (node != s_sentinelNode && node->data.first != key)
     {
         node = (key < node->data.first) ? node->left : node->right;
     }
-    return (node != m_sentinelNode) ? node : nullptr;
+    return (node != s_sentinelNode) ? node : nullptr;
 }
 
 template <typename Key, typename Value>
@@ -387,7 +391,7 @@ void Map<Key, Value>::construct(const std::vector<std::pair<Key, Value>>& keys)
 template <typename Key, typename Value>
 void Map<Key, Value>::clear()
 {
-    if (m_root == m_sentinelNode) return;
+    if (m_root == s_sentinelNode) return;
 
     std::queue<TreeNode<std::pair<Key, Value>>*> nodeQueue;
     nodeQueue.push(m_root);
@@ -395,17 +399,17 @@ void Map<Key, Value>::clear()
     {
         TreeNode<std::pair<Key, Value>>* node = nodeQueue.front();
         nodeQueue.pop();
-        if (node->left != m_sentinelNode)
+        if (node->left != s_sentinelNode)
         {
             nodeQueue.push(node->left);
         }
-        if (node->right != m_sentinelNode)
+        if (node->right != s_sentinelNode)
         {
             nodeQueue.push(node->right);
         }
         delete node;
     }
-    m_root = m_sentinelNode;
+    m_root = s_sentinelNode;
 }
 
 template <typename Key, typename Value>
@@ -413,12 +417,12 @@ void Map<Key, Value>::rotateLeft(TreeNode<std::pair<Key, Value>>* node)
 {
     TreeNode<std::pair<Key, Value>>* y = node->right;
     node->right = y->left;
-    if (y->left != m_sentinelNode)
+    if (y->left != s_sentinelNode)
     {
         y->left->parent = node;
     }
     y->parent = node->parent;
-    if (node->parent == m_sentinelNode)
+    if (node->parent == s_sentinelNode)
     {
         m_root = y;
     }
@@ -441,12 +445,12 @@ void Map<Key, Value>::rotateRight(TreeNode<std::pair<Key, Value>>* node)
 {
     TreeNode<std::pair<Key, Value>>* y = node->left;
     node->left = y->right;
-    if (y->right != m_sentinelNode)
+    if (y->right != s_sentinelNode)
     {
         y->right->parent = node;
     }
     y->parent = node->parent;
-    if (node->parent == m_sentinelNode)
+    if (node->parent == s_sentinelNode)
     {
         m_root = y;
     }
@@ -498,7 +502,7 @@ void Map<Key, Value>::printTree(int option) const
 template <typename Key, typename Value>
 void Map<Key, Value>::print2DUtil(TreeNode<std::pair<Key, Value>>* root, int space) const
 {
-    if (root == m_sentinelNode)
+    if (root == s_sentinelNode)
         return;
 
     space += 10;
@@ -522,7 +526,7 @@ void Map<Key, Value>::print2D(TreeNode<std::pair<Key, Value>>* root) const
 template <typename Key, typename Value>
 void Map<Key, Value>::printPreorder(TreeNode<std::pair<Key, Value>>* node) const
 {
-    if (node == m_sentinelNode) return;
+    if (node == s_sentinelNode) return;
 
     std::cout << node->data.first << " ";
     printPreorder(node->left);
@@ -532,7 +536,7 @@ void Map<Key, Value>::printPreorder(TreeNode<std::pair<Key, Value>>* node) const
 template <typename Key, typename Value>
 void Map<Key, Value>::printInorder(TreeNode<std::pair<Key, Value>>* node) const
 {
-    if (node == m_sentinelNode) return;
+    if (node == s_sentinelNode) return;
 
     printInorder(node->left);
     std::cout << node->data.first << " ";
@@ -542,7 +546,7 @@ void Map<Key, Value>::printInorder(TreeNode<std::pair<Key, Value>>* node) const
 template <typename Key, typename Value>
 void Map<Key, Value>::printPostorder(TreeNode<std::pair<Key, Value>>* node) const
 {
-    if (node == m_sentinelNode) return;
+    if (node == s_sentinelNode) return;
 
     printPostorder(node->left);
     printPostorder(node->right);
@@ -552,7 +556,7 @@ void Map<Key, Value>::printPostorder(TreeNode<std::pair<Key, Value>>* node) cons
 template <typename Key, typename Value>
 void Map<Key, Value>::printBreadth() const
 {
-    if (m_root == m_sentinelNode) return;
+    if (m_root == s_sentinelNode) return;
 
     std::queue<TreeNode<std::pair<Key, Value>>*> nodeQueue;
     nodeQueue.push(m_root);
@@ -561,11 +565,11 @@ void Map<Key, Value>::printBreadth() const
         TreeNode<std::pair<Key, Value>>* node = nodeQueue.front();
         nodeQueue.pop();
         std::cout << node->data.first << " ";
-        if (node->left != m_sentinelNode)
+        if (node->left != s_sentinelNode)
         {
             nodeQueue.push(node->left);
         }
-        if (node->right != m_sentinelNode)
+        if (node->right != s_sentinelNode)
         {
             nodeQueue.push(node->right);
         }
