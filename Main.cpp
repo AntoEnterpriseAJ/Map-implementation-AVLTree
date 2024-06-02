@@ -8,7 +8,7 @@ void displayMenu()
     std::cout << "\n===== Menu =====\n"
         << "1. Insert key-value pair\n"
         << "2. Delete key\n"
-        << "3. Find key\n"
+        << "3. Contains key\n"
         << "4. Print tree (Preorder)\n"
         << "5. Print tree (Inorder)\n"
         << "6. Print tree (Postorder)\n"
@@ -57,16 +57,15 @@ int main()
             int keyToFind;
             std::cout << "Enter key to find: ";
             std::cin >> keyToFind;
-            TreeNode<std::pair<int, std::string>>* foundNode = map.find(keyToFind);
-            if (foundNode != nullptr)
+            
+            if (map.contains(keyToFind))
             {
-                std::cout << "Key " << keyToFind << " found with value: " << foundNode->data.second << std::endl;
-            }
+				std::cout << "Key found!" << std::endl;
+			}
             else
             {
-                std::cout << "Key " << keyToFind << " not found in the map." << std::endl;
-            }
-            break;
+				std::cout << "Key not found!" << std::endl;
+			}
         }
         case 4:
             std::cout << "Preorder traversal: ";

@@ -9,17 +9,12 @@ class Map
 {
 public:
     void insert(const std::pair<Key, Value>& pair);
-    void erase(Key key);
+    void erase(const Key& key);
     void construct(const std::vector<std::pair<Key, Value>>& keys);
     void clear();
     void deleteNode(TreeNode<std::pair<Key, Value>>* node);
 
-    TreeNode<std::pair<Key, Value>>* max(TreeNode<std::pair<Key, Value>>* root);
-    TreeNode<std::pair<Key, Value>>* min(TreeNode<std::pair<Key, Value>>* root);
-    TreeNode<std::pair<Key, Value>>* successor(TreeNode<std::pair<Key, Value>>* node);
-    TreeNode<std::pair<Key, Value>>* predecessor(TreeNode<std::pair<Key, Value>>* node);
-    TreeNode<std::pair<Key, Value>>* find(Key key);
-
+    bool contains(const Key& key) const;
     bool empty() const;
     void printTree(int option) const;
     void print2D(TreeNode<std::pair<Key, Value>>* root) const;
@@ -105,6 +100,12 @@ private:
     void rotateRight(TreeNode<std::pair<Key, Value>>* node);
     void transplant(TreeNode<std::pair<Key, Value>>* z, TreeNode<std::pair<Key, Value>>* y);
     void print2DUtil(TreeNode<std::pair<Key, Value>>* root, int space) const;
+
+    TreeNode<std::pair<Key, Value>>* find(const Key& key) const;
+    TreeNode<std::pair<Key, Value>>* max(TreeNode<std::pair<Key, Value>>* root) const;
+    TreeNode<std::pair<Key, Value>>* min(TreeNode<std::pair<Key, Value>>* root) const;
+    TreeNode<std::pair<Key, Value>>* successor(TreeNode<std::pair<Key, Value>>* node) const;
+    TreeNode<std::pair<Key, Value>>* predecessor(TreeNode<std::pair<Key, Value>>* node) const;
 };
 
 template<typename Key, typename Value>
@@ -119,6 +120,12 @@ Map<Key, Value>::~Map()
 {
     clear();
     delete s_sentinelNode;
+}
+
+template<typename Key, typename Value>
+bool Map<Key, Value>::contains(const Key& key) const
+{
+    return find(key) != s_sentinelNode;
 }
 
 template <typename Key, typename Value>
@@ -256,7 +263,7 @@ void Map<Key, Value>::transplant(TreeNode<std::pair<Key, Value>>* z, TreeNode<st
 }
 
 template <typename Key, typename Value>
-void Map<Key, Value>::erase(Key key)
+void Map<Key, Value>::erase(const Key& key)
 {
     TreeNode<std::pair<Key, Value>>* node = find(key);
     if (node == nullptr) return;
@@ -369,7 +376,7 @@ void Map<Key, Value>::insert(const std::pair<Key, Value>& pair)
 }
 
 template <typename Key, typename Value>
-TreeNode<std::pair<Key, Value>>* Map<Key, Value>::max(TreeNode<std::pair<Key, Value>>* root)
+TreeNode<std::pair<Key, Value>>* Map<Key, Value>::max(TreeNode<std::pair<Key, Value>>* root) const
 {
     if (root == s_sentinelNode) return nullptr;
 
@@ -383,7 +390,7 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::max(TreeNode<std::pair<Key, Va
 }
 
 template <typename Key, typename Value>
-TreeNode<std::pair<Key, Value>>* Map<Key, Value>::min(TreeNode<std::pair<Key, Value>>* root)
+TreeNode<std::pair<Key, Value>>* Map<Key, Value>::min(TreeNode<std::pair<Key, Value>>* root) const
 {
     if (root == s_sentinelNode) return nullptr;
 
@@ -397,7 +404,7 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::min(TreeNode<std::pair<Key, Va
 }
 
 template <typename Key, typename Value>
-TreeNode<std::pair<Key, Value>>* Map<Key, Value>::successor(TreeNode<std::pair<Key, Value>>* node)
+TreeNode<std::pair<Key, Value>>* Map<Key, Value>::successor(TreeNode<std::pair<Key, Value>>* node) const
 {
     if (node->right != s_sentinelNode)
     {
@@ -413,7 +420,7 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::successor(TreeNode<std::pair<K
 }
 
 template <typename Key, typename Value>
-TreeNode<std::pair<Key, Value>>* Map<Key, Value>::predecessor(TreeNode<std::pair<Key, Value>>* node)
+TreeNode<std::pair<Key, Value>>* Map<Key, Value>::predecessor(TreeNode<std::pair<Key, Value>>* node) const
 {
     if (node->left != s_sentinelNode)
     {
@@ -429,14 +436,14 @@ TreeNode<std::pair<Key, Value>>* Map<Key, Value>::predecessor(TreeNode<std::pair
 }
 
 template <typename Key, typename Value>
-TreeNode<std::pair<Key, Value>>* Map<Key, Value>::find(Key key)
+TreeNode<std::pair<Key, Value>>* Map<Key, Value>::find(const Key& key) const
 {
     TreeNode<std::pair<Key, Value>>* node = m_root;
     while (node != s_sentinelNode && node->data.first != key)
     {
         node = (key < node->data.first) ? node->left : node->right;
     }
-    return (node != s_sentinelNode) ? node : nullptr;
+    return (node != s_sentinelNode) ? node : s_sentinelNode;
 }
 
 template <typename Key, typename Value>
