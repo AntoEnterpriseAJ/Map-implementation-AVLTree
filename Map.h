@@ -23,54 +23,26 @@ public:
     void printPostorder(TreeNode<std::pair<Key, Value>>* node) const;
     void printBreadth() const;
 
-    class Iterator {
+    class Iterator 
+    {
     public:
         using value_type = std::pair<Key, Value>;
         using pointer = value_type*;
         using reference = value_type&;
 
+
+        Iterator& operator++();
+        Iterator operator++(int);
+        Iterator& operator--();
+        Iterator operator--(int);
+        reference operator*() const { return m_node->data; }
+        pointer operator->() const { return &(m_node->data); }
+        
+        bool operator==(const Iterator& other) const { return m_node == other.m_node; }
+        bool operator!=(const Iterator& other) const { return !(*this == other); }
+
         Iterator(TreeNode<std::pair<Key, Value>>* node) : m_node(node) {}
-
-        Iterator& operator++() {
-            m_node = map->successor(m_node);
-            return *this;
-        }
-
-        Iterator operator++(int) {
-            Iterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-
-        Iterator& operator--() {
-            m_node = map->predecessor(m_node);
-            return *this;
-        }
-
-        Iterator operator--(int) {
-            Iterator tmp = *this;
-            --(*this);
-            return tmp;
-        }
-
-        reference operator*() const {
-            return m_node->data;
-        }
-
-        pointer operator->() const {
-            return &(m_node->data);
-        }
-
-        bool operator==(const Iterator& other) const {
-            return m_node == other.m_node;
-        }
-
-        bool operator!=(const Iterator& other) const {
-            return !(*this == other);
-        }
-
         friend class Map;
-
     private:
         TreeNode<std::pair<Key, Value>>* m_node;
         Map* map;
@@ -121,6 +93,37 @@ Map<Key, Value>::~Map()
     clear();
     delete s_sentinelNode;
 }
+
+template <typename Key, typename Value>
+typename Map<Key, Value>::Iterator& Map<Key, Value>::Iterator::operator++()
+{
+	m_node = map->successor(m_node);
+	return *this;
+}
+
+template<typename Key, typename Value>
+typename Map<Key, Value>::Iterator Map<Key, Value>::Iterator::operator++(int)
+{
+    Iterator tmp = *this;
+    ++(*this);
+    return tmp;
+}
+
+template<typename Key, typename Value>
+typename Map<Key,Value>::Iterator& Map<Key, Value>::Iterator::operator--()
+{
+    m_node = map->predecessor(m_node);
+    return *this;
+}
+
+template<typename Key, typename Value>
+typename Map<Key, Value>::Iterator Map<Key, Value>::Iterator::operator--(int)
+{
+    Iterator tmp = *this;
+    --(*this);
+    return tmp;
+}
+
 
 template<typename Key, typename Value>
 bool Map<Key, Value>::contains(const Key& key) const
