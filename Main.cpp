@@ -49,7 +49,7 @@ int main()
             int keyToDelete;
             std::cout << "Enter key to delete: ";
             std::cin >> keyToDelete;
-            map.deleteNode(keyToDelete);
+            map.erase(keyToDelete);
             break;
         }
         case 3:

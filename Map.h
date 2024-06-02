@@ -9,10 +9,10 @@ class Map
 {
 public:
     void insert(Key key, Value value);
-    void deleteNode(Key key);
-    void erase(TreeNode<std::pair<Key, Value>>* node);
+    void erase(Key key);
     void construct(const std::vector<std::pair<Key, Value>>& keys);
     void clear();
+    void deleteNode(TreeNode<std::pair<Key, Value>>* node);
 
     TreeNode<std::pair<Key, Value>>* max(TreeNode<std::pair<Key, Value>>* root);
     TreeNode<std::pair<Key, Value>>* min(TreeNode<std::pair<Key, Value>>* root);
@@ -256,7 +256,7 @@ void Map<Key, Value>::transplant(TreeNode<std::pair<Key, Value>>* z, TreeNode<st
 }
 
 template <typename Key, typename Value>
-void Map<Key, Value>::deleteNode(Key key)
+void Map<Key, Value>::erase(Key key)
 {
     TreeNode<std::pair<Key, Value>>* node = find(key);
     if (node == nullptr) return;
@@ -295,7 +295,7 @@ void Map<Key, Value>::deleteNode(Key key)
 }
 
 template <typename Key, typename Value>
-void Map<Key, Value>::erase(TreeNode<std::pair<Key, Value>>* node)
+void Map<Key, Value>::deleteNode(TreeNode<std::pair<Key, Value>>* node)
 {
     if (node == nullptr) return;
 
