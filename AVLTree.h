@@ -43,7 +43,7 @@ public:
 };
 
 template<typename T>
-TreeNode<T>* AVLTree<T>::m_sentinelNode = new TreeNode<T>{ 0, 0 };
+TreeNode<T>* AVLTree<T>::m_sentinelNode = new TreeNode<T>{};
 
 template <typename T>
 AVLTree<T>::AVLTree() : m_root{ m_sentinelNode }

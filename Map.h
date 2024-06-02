@@ -1,5 +1,6 @@
 #pragma once
 #include "AVLTree.h"
+#include "TreeNode.h"
 #include <vector>
 
 template <typename keyType, typename valType>
