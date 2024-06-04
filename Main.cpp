@@ -60,12 +60,12 @@ int main()
             
             if (map.contains(keyToFind))
             {
-				std::cout << "Key found!" << std::endl;
-			}
+		std::cout << "Key found!" << std::endl;
+            }
             else
             {
-				std::cout << "Key not found!" << std::endl;
-			}
+		std::cout << "Key not found!" << std::endl;
+	    }
         }
         case 4:
             std::cout << "Preorder traversal: ";
