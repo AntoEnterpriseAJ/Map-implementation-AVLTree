@@ -20,7 +20,7 @@ The `Map` class is a template class that supports any data types for the keys an
 - **empty() const**: Checks if the map is empty.
 - **clear()**: Removes all elements from the map.
 - **printTree(int option) const**: Prints the tree using different traversal methods: 1 - preorder, 2 - inorder, 3 - postorder, 4 - breadth, 5 - print2D
-- **Print2D is used for a more visual approach
+- **Print2D** is used for a more visual approach
 
 ### Print2D
 ![image](https://github.com/AntoEnterpriseAJ/Map-implementation-AVLTree/assets/152036671/52c334f9-68e4-4706-be1e-aabfba5f850f)
